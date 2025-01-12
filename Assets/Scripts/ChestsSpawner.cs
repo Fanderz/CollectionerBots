@@ -8,7 +8,6 @@ public class ChestsSpawner : MonoBehaviour
     [SerializeField] private Chest _chestPrefab;
     [SerializeField] private int _poolMaxSize;
     [SerializeField] private float _spawnDelay;
-    [SerializeField] private ChestCollector _collector;
 
     private float xStartPosition = 28;
     private float zStartPosition = 28;

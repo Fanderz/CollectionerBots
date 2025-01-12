@@ -1721,6 +1721,7 @@ GameObject:
   - component: {fileID: 8967210635278418002}
   - component: {fileID: 7817440536667761270}
   - component: {fileID: 3032252071441571272}
+  - component: {fileID: 1195950265621961908}
   m_Layer: 0
   m_Name: BlackPerson(NavMesh
   m_TagString: Untagged
@@ -1885,6 +1886,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d13b720d7e30d234f85652d39d98ca27, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1195950265621961908
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6955532905508810980}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fdb20d08e19cfd6438bbbda2126523fd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &7229631743349843718

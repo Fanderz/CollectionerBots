@@ -2020,7 +2020,6 @@ MonoBehaviour:
   _chestPrefab: {fileID: 517565470856858678, guid: d9a8009746e292c4683386b5f2068848, type: 3}
   _poolMaxSize: 7
   _spawnDelay: 5
-  _collector: {fileID: 0}
 --- !u!1001 &1520654839
 PrefabInstance:
   m_ObjectHideFlags: 0

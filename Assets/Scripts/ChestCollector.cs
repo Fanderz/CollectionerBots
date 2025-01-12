@@ -7,11 +7,11 @@ public class ChestCollector : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _text;
 
     private int _chestsCollectedScore = 0;
-    private ChestsScanner _scanner;
+    private Base _scanner;
 
     private void Awake()
     {
-        _scanner = GetComponent<ChestsScanner>();
+        _scanner = GetComponent<Base>();
 
         foreach (Person person in _scanner.Persons)
             if (person.TryGetComponent(out ChestsPicker picker))
