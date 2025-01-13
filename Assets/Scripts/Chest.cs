@@ -4,12 +4,10 @@ using UnityEngine.AI;
 public class Chest : MonoBehaviour
 {
     public bool busy { get; private set; }
-    public bool picked { get; private set; }
 
     private void OnEnable()
     {
         busy = false;
-        picked = false;
     }
 
     private void OnTriggerEnter(Collider collider)
@@ -20,7 +18,4 @@ public class Chest : MonoBehaviour
 
     public void SetBusy() =>
         busy = true;
-
-    public void SetPicked() =>
-        picked = true;
 }

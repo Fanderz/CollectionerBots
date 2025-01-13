@@ -1,9 +1,11 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class ChestsPicker : MonoBehaviour
 {
     private Vector3 _chestPickedPosition = new Vector3(0, 0.3f, 0.4f);
+    private List<Chest> _pickedChests = new List<Chest>();
 
     private Person _person;
     private PersonMover _mover;
@@ -26,7 +28,7 @@ public class ChestsPicker : MonoBehaviour
     {
         if (collider.TryGetComponent(out Chest chest) && HaveChest == false)
         {
-            if (chest.picked == false && _person.ChestTarget.position != null)
+            if (_person.ChestTarget.position != null)
             {
                 if (chest.transform.position == _person.ChestTarget.position)
                     PickChest(chest);
@@ -41,14 +43,17 @@ public class ChestsPicker : MonoBehaviour
 
     private void PickChest(Chest chest)
     {
-        _mover.SetSpeed(0);
-        IsPicking = true;
-        PickingOrDroppingObject?.Invoke(HaveChest, IsPicking, _mover.PersonSpeed);
+        if (_pickedChests.Find(pickedChest => pickedChest == chest) == null)
+        {
+            _mover.SetSpeed(0);
+            IsPicking = true;
+            PickingOrDroppingObject?.Invoke(HaveChest, IsPicking, _mover.PersonSpeed);
 
-        SetChestChild(chest);
-        _mover.SetSpeed();
-        IsPicking = false;
-        MovingWithObject?.Invoke();
+            SetChestChild(chest);
+            _mover.SetSpeed();
+            IsPicking = false;
+            MovingWithObject?.Invoke();
+        }
     }
 
     private void DropChest(Chest chest)
@@ -61,14 +66,15 @@ public class ChestsPicker : MonoBehaviour
 
         _person.ResetTarget();
         ChestDropped?.Invoke(chest);
+        _pickedChests.Remove(chest);
     }
 
     private void SetChestChild(Chest chest)
     {
         chest.transform.SetParent(this.transform);
         chest.transform.localPosition = _chestPickedPosition;
-        chest.SetPicked();
         HaveChest = true;
         _pickedChest = chest;
+        _pickedChests.Add(chest);
     }
 }

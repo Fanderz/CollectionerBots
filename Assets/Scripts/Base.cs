@@ -1,17 +1,11 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Base : MonoBehaviour
 {
     [SerializeField] private List<Person> _persons;
-    [SerializeField] private float _searchDelay;
 
-    private bool _isEnabled;
-    private List<Chest> _finded;
-
-    private WaitForSeconds _searchWait;
-    private Coroutine _searchCoroutine;
+    private ChestsScanner _scanner;
 
     public List<Person> Persons 
     { 
@@ -23,51 +17,19 @@ public class Base : MonoBehaviour
 
     private void Awake()
     {
-        _searchWait = new WaitForSeconds(_searchDelay);
-        _finded = new List<Chest>();
+        _scanner = GetComponent<ChestsScanner>();
+
+        _scanner.ChestFinded += SendPerson;
     }
 
-    private void OnEnable()
+    private void SendPerson(Chest chest)
     {
-        _isEnabled = true;
+        Person freePerson = _persons.Find(person => person.HaveTarget == false);
 
-        _searchCoroutine = StartCoroutine(SearchCoroutine());
-    }
-
-    private void OnDisable()
-    {
-        _isEnabled = false;
-
-        if (_searchCoroutine != null)
-            StopCoroutine(_searchCoroutine);
-    }
-
-    private IEnumerator SearchCoroutine()
-    {
-        while (_isEnabled)
+        if (freePerson != null)
         {
-            Person freePerson = _persons.Find(person => person.HaveTarget == false);
-
-            if (freePerson != null)
-            {
-                FindChests();
-
-                if (_finded.Count > 0)
-                    freePerson.SetTargetChest(_finded.Find(chest => chest.busy == false));
-            }
-
-            yield return _searchWait;
+            if (_scanner.FindedChests.Count > 0)
+                freePerson.SetTargetChest(chest);
         }
-    }
-
-    private void FindChests()
-    {
-        _finded.Clear();
-
-        Collider[] finded = Physics.OverlapSphere(transform.position, 50f);
-
-        for (int i = 0; i < finded.Length; i++)
-            if (finded[i].TryGetComponent(out Chest chest))
-                _finded.Add(chest);
     }
 }

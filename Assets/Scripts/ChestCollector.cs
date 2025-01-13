@@ -7,13 +7,13 @@ public class ChestCollector : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _text;
 
     private int _chestsCollectedScore = 0;
-    private Base _scanner;
+    private Base _base;
 
     private void Awake()
     {
-        _scanner = GetComponent<Base>();
+        _base = GetComponent<Base>();
 
-        foreach (Person person in _scanner.Persons)
+        foreach (Person person in _base.Persons)
             if (person.TryGetComponent(out ChestsPicker picker))
                 picker.ChestDropped += CollectChest;
     }
