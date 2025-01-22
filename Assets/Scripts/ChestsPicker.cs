@@ -14,6 +14,9 @@ public class ChestsPicker : MonoBehaviour
     public bool HaveChest { get; private set; }
     public bool IsPicking { get; private set; }
 
+    public bool HaveChestDroppedSubscribers =>
+        ChestDropped != null;
+
     public event Action<Chest> ChestDropped;
     public event Action<bool, bool, float> PickingOrDroppingObject;
     public event Action MovingWithObject;
@@ -28,16 +31,19 @@ public class ChestsPicker : MonoBehaviour
     {
         if (collider.TryGetComponent(out Chest chest) && HaveChest == false)
         {
-            if (_person.ChestTarget.position != null)
-            {
-                if (chest.transform.position == _person.ChestTarget.position)
-                    PickChest(chest);
-            }
+            if (chest.transform.position == _person.Target?.position)
+                PickChest(chest);
         }
-        else if (collider.TryGetComponent(out ChestCollector collectorBase) && HaveChest == true)
+    }
+
+    private void OnTriggerStay(Collider collider)
+    {
+        if (collider.TryGetComponent(out ChestCollector collectorBase) && HaveChest == true && collectorBase.transform.position == _person.BasePosition)
         {
             if (_pickedChest != null)
                 DropChest(_pickedChest);
+            else
+                _person.ResetTarget();
         }
     }
 

@@ -13,15 +13,10 @@ public class ChestsScanner : MonoBehaviour
     private WaitForSeconds _searchWait;
     private Coroutine _searchCoroutine;
 
-    public List<Chest> FindedChests
-    {
-        get
-        {
-            return new List<Chest>(_finded);
-        }
-    }
+    public bool HaveSubscribers =>
+        ChestFinded != null;
 
-    public event Action<Chest> ChestFinded;
+    public event Action<GameObject> ChestFinded;
 
     private void Awake()
     {
@@ -46,10 +41,10 @@ public class ChestsScanner : MonoBehaviour
         {
             FindChests();
 
-            Chest chest = _finded.Find(chest => chest.busy == false);
+            Chest chest = _finded.Find(chest => chest.IsBusy == false);
 
             if (chest != null)
-                ChestFinded?.Invoke(chest);
+                ChestFinded?.Invoke(chest.gameObject);
 
             yield return _searchWait;
         }

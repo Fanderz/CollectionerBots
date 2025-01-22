@@ -24,6 +24,7 @@ public class BaseObjectPool<T> where T : MonoBehaviour, new()
             if (result != null)
             {
                 result.gameObject.SetActive(true);
+                result.gameObject.transform.parent = parent;
             }
         }
         else

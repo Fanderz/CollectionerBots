@@ -1,5 +1,4 @@
 using UnityEngine;
-using System;
 using System.Collections;
 using Rand = UnityEngine.Random;
 
@@ -9,8 +8,8 @@ public class ChestsSpawner : MonoBehaviour
     [SerializeField] private int _poolMaxSize;
     [SerializeField] private float _spawnDelay;
 
-    private float xStartPosition = 28;
-    private float zStartPosition = 28;
+    private readonly float xStartPosition = 28;
+    private readonly float zStartPosition = 28;
 
     private bool isEnabled = false;
 
@@ -18,8 +17,6 @@ public class ChestsSpawner : MonoBehaviour
     private Coroutine _chestsCoroutine;
 
     private BaseObjectPool<Chest> _pool;
-
-    public event Action<Chest> SpawnedChest;
 
     private void Awake()
     {
@@ -51,7 +48,7 @@ public class ChestsSpawner : MonoBehaviour
             if (chest != null)
             {
                 chest.transform.position = startPosition;
-                SpawnedChest?.Invoke(chest);
+                chest.transform.SetParent(transform);
             }
 
             yield return _wait;

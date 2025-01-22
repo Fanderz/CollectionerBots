@@ -3,30 +3,43 @@ using UnityEngine;
 
 public class ChestCollector : MonoBehaviour
 {
-    [SerializeField] private Transform _spawner;
     [SerializeField] private TextMeshProUGUI _text;
+    [SerializeField] private Canvas _canvas;
+    private Supermarket _base;
 
-    private int _chestsCollectedScore = 0;
-    private Base _base;
+    public int Score { get; private set; }
 
     private void Awake()
     {
-        _base = GetComponent<Base>();
+        _base = GetComponent<Supermarket>();
+        _base.PayingPersonSpawn += SpendMoney;
+        _base.PayingSupermarketSpawn += SpendMoney;
+        _canvas.worldCamera = Camera.main;
 
+        Score = 0;
+    }
+
+    private void OnEnable()
+    {
         foreach (Person person in _base.Persons)
-            if (person.TryGetComponent(out ChestsPicker picker))
+            if (person.TryGetComponent(out ChestsPicker picker) && picker.HaveChestDroppedSubscribers == false)
                 picker.ChestDropped += CollectChest;
     }
 
-    private void CollectChest(Chest chest)
+    public void CollectChest(Chest chest)
     {
         if (chest != null)
         {
-            chest.transform.SetParent(_spawner);
             chest.gameObject.SetActive(false);
 
-            _chestsCollectedScore++;
-            _text.text = _chestsCollectedScore.ToString();
+            Score++;
+            _text.text = Score.ToString();
         }    
+    }
+
+    private void SpendMoney(int cost)
+    {
+        Score -= cost;
+        _text.text = Score.ToString();
     }
 }

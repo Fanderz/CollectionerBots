@@ -5,32 +5,45 @@ public class Person : MonoBehaviour
 {
     [SerializeField] private Transform _base;
 
+    private ChestsPicker _picker;
+    private PersonMover _mover;
+    private GameObject _target;
+
     public bool HaveTarget { get; private set; }
 
-    private Chest _target;
-
-    public Transform ChestTarget => _target.transform;
+    public Transform Target => _target?.transform;
     public Vector3 BasePosition => _base.transform.position;
 
-    public event Action<Chest> TargetSetted;
+    public event Action<Vector3> TargetSetted;
+    public event Action<bool, bool, float> AnimatorParameterChanged;
 
     private void Awake()
     {
-        HaveTarget = false;
+        _picker = GetComponent<ChestsPicker>();
+        _mover = GetComponent<PersonMover>();
     }
 
-    public void SetTargetChest(Chest target)
+    public void SetTarget(GameObject target)
     {
         if (target != null)
         {
             _target = target;
             HaveTarget = true;
-            target.SetBusy();
+            
+            if(target.TryGetComponent(out Chest chest))
+                chest.SetBusy();
 
-            TargetSetted?.Invoke(_target);
+            TargetSetted?.Invoke(_target.transform.position);
         }
     }
 
-    public void ResetTarget() =>
+    public void ResetTarget()
+    {
+        _mover.SetSpeed(0);
+        AnimatorParameterChanged?.Invoke(_picker.HaveChest, _picker.IsPicking, _mover.PersonSpeed);
         HaveTarget = false;
+    }
+
+    public void SetBasePosition(Transform supermarket) =>
+        _base = supermarket;
 }

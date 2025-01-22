@@ -27,12 +27,12 @@ public class PersonMover : MonoBehaviour
     public void SetSpeed(float speed = DefaultSpeed) =>
         _agent.speed = speed;
 
-    private void MoveToTarget(Chest target)
+    private void MoveToTarget(Vector3 target)
     {
-        if (target.enabled)
+        if (target != null)
         {
             _agent.speed = DefaultSpeed;
-            _agent.SetDestination(target.transform.position);
+            _agent.SetDestination(target);
             AnimatorParameterChanged?.Invoke(_picker.HaveChest, _picker.IsPicking, _agent.speed);
         }
     }
